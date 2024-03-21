@@ -186,6 +186,9 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 vim.keymap.set('n', '<leader>pv', ':Explore<CR>', { desc = 'Open Explore' })
 vim.keymap.set('n', '<leader>pt', ':vsplit | term<CR>', { desc = 'Open Terminal' })
 
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
