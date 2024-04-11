@@ -525,6 +525,25 @@ require('lazy').setup {
         end,
       })
 
+      local lspconfig = require 'lspconfig'
+      local configs = require 'lspconfig/configs'
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+      lspconfig.emmet_ls.setup {
+        -- on_attach = on_attach,
+        capabilities = capabilities,
+        filetypes = { 'css', 'blade', 'eruby', 'html', 'javascript', 'javascriptreact', 'less', 'sass', 'scss', 'svelte', 'pug', 'typescriptreact', 'vue' },
+        init_options = {
+          html = {
+            options = {
+              -- For possible options, see: https://github.com/emmetio/emmet/blob/master/src/config.ts#L79-L267
+              ['bem.enabled'] = true,
+            },
+          },
+        },
+      }
+
       -- LSP servers and clients are able to communicate to each other what features they support.
       --  By default, Neovim doesn't support everything that is in the LSP Specification.
       --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
@@ -790,6 +809,19 @@ require('lazy').setup {
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
+    dependencies = {
+      {
+        'JoosepAlviste/nvim-ts-context-commentstring',
+        opts = {
+          custom_calculation = function(_, language_tree)
+            if vim.bo.filetype == 'blade' and language_tree._lang ~= 'javascript' and language_tree._lang ~= 'php' then
+              return '{{-- %s --}}'
+            end
+          end,
+        },
+      },
+      'nvim-treesitter/nvim-treesitter-textobjects',
+    },
     config = function()
       -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 
